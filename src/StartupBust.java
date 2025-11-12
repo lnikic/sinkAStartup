@@ -5,7 +5,7 @@ public class StartupBust {
     private ArrayList<Startup> startups = new ArrayList<>();
     private int numOfGuesses = 0;
 
-    private void setUpGame() {
+    public void setUpGame() {
         Startup one = new Startup();
         one.setName("poniez");
         Startup two = new Startup();
@@ -26,11 +26,40 @@ public class StartupBust {
         }
     }
 
-    private void startPlaying() {
-        while(!startups.isEmpty()) {
+    public void startPlaying() {
+        while (!startups.isEmpty()) {
             String userGuess = helper.getUserInput("Enter a guess ");
             checkUserGuess(userGuess);
         }
         finishGame();
+    }
+
+    public void checkUserGuess(String userGuess) {
+        numOfGuesses++;
+        String result = "miss";
+
+        for (Startup startupToTest : startups) {
+            result = startupToTest.checkYourself(userGuess);
+
+            if (result.equals("hit")) {
+                break;
+            }
+            if (result.equals("kill")) {
+                startups.remove(startupToTest);
+                break;
+            }
+        }
+        System.out.println(result);
+    }
+
+    public void finishGame() {
+        System.out.println("All Startups are dead! Your stock is now worthless");
+        if (numOfGuesses <= 18) {
+            System.out.println("It only took you " + numOfGuesses + " guesses.");
+            System.out.println("You got out before your options sank.");
+        } else {
+            System.out.println("Took you long enough. " + numOfGuesses + " guesses.");
+            System.out.println("Fish are dancing with your options");
+        }
     }
 }
